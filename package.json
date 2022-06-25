@@ -1,0 +1,32 @@
+{
+  "name": "household-payment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kshitijdomadia/household-payment.git"
+  },
+  "keywords": [
+    "blockchain",
+    "solidity",
+    "smart contracts"
+  ],
+  "author": "Kshitij Domadia",
+  "license": "None",
+  "bugs": {
+    "url": "https://github.com/kshitijdomadia/household-payment/issues"
+  },
+  "homepage": "https://github.com/kshitijdomadia/household-payment#readme",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.9",
+    "hardhat": "^2.9.9"
+  }
+}
