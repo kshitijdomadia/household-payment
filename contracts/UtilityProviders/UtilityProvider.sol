@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: None
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 abstract contract UtilityProvider {
     event BillPayed(address indexed householdAddress, uint256 indexed amount);
     event HouseholdRegistered(
@@ -9,6 +11,7 @@ abstract contract UtilityProvider {
     );
 
     mapping(address => string) private registeredHouseholds;
+    mapping(address => uint256) private balances;
     uint256 internal fee;
 
     // Register a new Household
@@ -18,8 +21,22 @@ abstract contract UtilityProvider {
         returns (bool)
     {
         registeredHouseholds[_household] = _name;
-        emit HouseholdRegistered(_household, _name);
-        return true;
+        bytes memory _nameStorageRef = bytes(registeredHouseholds[_household]);
+        if (_nameStorageRef.length == 0) {
+            return false;
+        } else {
+            emit HouseholdRegistered(_household, _name);
+            return true;
+        }
+    }
+
+    function readHouseholds(address _household) external virtual {
+        bytes memory test = bytes(registeredHouseholds[_household]);
+        if (test.length == 0) {
+            console.log("String is zero!");
+        } else {
+            console.log(string(test));
+        }
     }
 
     // Check if the payment is required and how much
@@ -27,7 +44,9 @@ abstract contract UtilityProvider {
         external
         virtual
         returns (uint256)
-    {}
+    {
+        return balances[_household];
+    }
 
     /*
      *Allows to pay the bill of a certain household. However, before the payment can be

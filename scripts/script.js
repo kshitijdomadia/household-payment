@@ -14,12 +14,26 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  const Gas = await hre.ethers.getContractFactory("GasProvider");
+  const gas = await Gas.deploy();
 
-  await greeter.deployed();
+  const gasReceipt = await gas.deployed();
 
-  console.log("Greeter deployed to:", greeter.address);
+  console.log("GasContract deployed to:", gas.address);
+
+  const registration = await gas.registerHousehold("0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc", "Mumbai")
+  const readRegistration = await gas.readHouseholds("0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc")
+  const readRegistration2 = await gas.readHouseholds("0x2546BcD3c84621e976D8185a91A922aE77ECEc30")
+
+  // console.log(readRegistration)
+  // console.log(readRegistration2)
+
+  //const receipt = await readRegistration.wait();
+  //const receipt2 = await readRegistration2.wait();
+
+  // console.log(receipt)
+  // console.log(receipt2)
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere
