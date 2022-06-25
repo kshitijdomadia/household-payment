@@ -8,11 +8,13 @@ abstract contract UtilityProvider {
     function registerHousehold(address household, string memory name)
         external
         virtual
-        returns (bool);
+        returns (bool)
+    {}
 
     // Check if the payment is required and how much
     function paymentRequired(address household)
         external
         virtual
-        returns (uint256);
+        returns (uint256)
+    {}
 }
