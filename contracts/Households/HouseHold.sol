@@ -7,7 +7,7 @@ abstract contract HouseHold is AccessControl {
     event AddedCrypto(address indexed token, address indexed account);
     event RemovedCrypto(address indexed token, address indexed account);
 
-    mapping(address => bool) public cryptos;
+    mapping(address => bool) private cryptos;
 
     // Will add a member to the household
     function addMember(bytes32 _role, address _account)
