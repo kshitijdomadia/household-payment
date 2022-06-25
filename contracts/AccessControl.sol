@@ -13,7 +13,7 @@ abstract contract AccessControl {
      * attacker to purposefully become the "_CREATOR" of the contract by granting themselves _CREATOR rights by
      * using the _CREATOR hash.
      */
-    address private immutable _CREATOR;
+    address private _CREATOR;
     // 0xe0a0f7a45cdcd35098a308bfc1687a7d925dd1a3e120f49caa703614ff21847c  - Bytes32 if "SPECIAL" is packed
     bytes32 internal constant SPECIAL = keccak256(abi.encodePacked("SPECIAL"));
     // 0x4a480454dcdcf9c032ac1b5db36b6df0bffc2c4b4887d1b7314ce196d5080e4b - Bytes32 if "ALLOWED" is packed
