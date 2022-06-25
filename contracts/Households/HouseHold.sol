@@ -40,9 +40,15 @@ abstract contract HouseHold is AccessControl {
     }
 
     // Allows to pay the utility bill for one of the providers ONLY by an ALLOWED or OWNER/CREATOR of this Household contract
-    function payBill(address utiliyProvider, uint256 amount)
+    function verifyBillPayment(address _member)
         external
         virtual
-        onlyRole(ALLOWED)
-    {}
+        returns (bool)
+    {
+        require(
+            roles[ALLOWED][_member],
+            "You're not an authorised member to pay the bill"
+        );
+        return true;
+    }
 }
