@@ -13,7 +13,7 @@ abstract contract HouseHold is AccessControl {
     function addMember(bytes32 _role, address _account)
         external
         virtual
-        onlyRole(SPECIAL)
+        onlyRole(NORMAL)
     {
         grantRole(_role, _account);
     }
