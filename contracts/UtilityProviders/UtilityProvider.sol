@@ -2,16 +2,25 @@
 pragma solidity ^0.8.0;
 
 abstract contract UtilityProvider {
-    event BillPayed(address indexed household, uint256 indexed amount);
+    event BillPayed(address indexed householdAddress, uint256 indexed amount);
+    event HouseholdRegistered(
+        address indexed householdAddress,
+        string indexed name
+    );
 
-    uint256 internal fee; // $130 will be the fee payment for each invoice
+    mapping(address => string) private registeredHouseholds;
+    uint256 internal fee;
 
     // Register a new Household
     function registerHousehold(address _household, string memory _name)
         external
         virtual
         returns (bool)
-    {}
+    {
+        registeredHouseholds[_household] = _name;
+        emit HouseholdRegistered(_household, _name);
+        return true;
+    }
 
     // Check if the payment is required and how much
     function paymentRequired(address _household)
