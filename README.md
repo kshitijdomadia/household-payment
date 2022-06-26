@@ -42,14 +42,14 @@ The project has been created with a few basic assumptions in mind.
 - A token that has mooned (1 Token= $100,000)? :exploding_head:
 - Enough balance for paying utilities/other things.
 
->A simple solution for this would be to go target the easily liquidable tokens that have a pair with one of the stable coins and simply add the Utility Providers Address in the 'to' column!
+>A simple solution for this would be to go target the easily liquidable tokens that have a pair with one of the stable coins by querying the 'getPair' of the DEX factory address and simply add the Utility Providers Address in the 'to' column!
 
 ```solidity
 function swapTokensForExactTokens(
         uint amountOut,
         uint amountInMax,
         address[] calldata path,
-        address to,
+        address to,                     <--- Add here!
         uint deadline
     ) external returns (uint[] memory amounts);
 ```
