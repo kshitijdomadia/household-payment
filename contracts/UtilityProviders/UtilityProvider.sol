@@ -90,9 +90,10 @@ abstract contract UtilityProvider {
     }
 
     /*
-     *Allows to pay the bill of a certain household. However, before the payment can be
-     *processed the Utility Provider will verify with the household if the msg.sender is authorised
-     *to pay the bill or not.
+     * Allows to pay the bill of a certain household. However, before the payment can be
+     * processed the Utility Provider will verify with the household if the msg.sender is authorised
+     * to pay the bill or not. Additionally, unpaid bills will still need to be paid if households miss their
+     * due dates.
      */
     function billPayment(address _household) external virtual {
         HouseHold(_household).verifyBillPayment(msg.sender);
