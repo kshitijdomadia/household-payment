@@ -26,7 +26,7 @@ module.exports = {
         blockNumber: 29988006,
         accounts: {
           initialIndex: 0,
-          count: 50
+          count: 20
         },
       }
     },
