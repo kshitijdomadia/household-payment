@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: None
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 abstract contract UtilityProvider {
     event BillPayed(address indexed householdAddress, uint256 indexed amount);
     event HouseholdRegistered(
@@ -24,7 +22,10 @@ abstract contract UtilityProvider {
         dueDates[_household] = _startDate + duration;
     }
 
-    // Register a new Household- Would rather not have this function. However this is a requirement as specified in the description.
+    /**
+     * Register a new Household- Would rather not have this function. However this is a requirement as
+     * specified in the description. Storing strings in mapping is more expensive as a string can be of nlength.
+     */
     function registerHousehold(address _household, string memory _name)
         external
         virtual
@@ -40,10 +41,14 @@ abstract contract UtilityProvider {
         }
     }
 
+    // Returns the fee specified for a particular utility provider
     function readFee() external view returns (uint256) {
         return fee;
     }
 
+    /**
+     * CalculateBillAmount- Calculates the billAmount for each household as per its due date.
+     */
     function calculateBillAmount(address _household)
         internal
         view
@@ -85,6 +90,7 @@ abstract contract UtilityProvider {
         return (balance, factor);
     }
 
+    // Returns a due date for a particular household.
     function checkDueDate(address _household) external view returns (uint64) {
         return dueDates[_household];
     }
@@ -103,6 +109,7 @@ abstract contract UtilityProvider {
     }
 }
 
+// Interface for the HouseHold contract to use the verifyBillPayment function.
 interface HouseHold {
     function verifyBillPayment(address _member) external;
 }
