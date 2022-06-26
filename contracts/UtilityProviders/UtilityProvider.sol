@@ -11,8 +11,20 @@ abstract contract UtilityProvider {
     );
 
     mapping(address => string) private registeredHouseholds;
-    mapping(address => uint256) private balances;
-    uint256 internal fee;
+    mapping(address => uint64) private dueDates;
+    uint256 private immutable fee;
+    uint64 private immutable startDate; // Due date for each provider will be ~ at the same date every month
+    uint64 private constant duration = 2592000; // Duration for each payment will be done after 30 Days. Epoch- 2592000
+
+    constructor(
+        uint64 _startDate,
+        uint256 _fee,
+        address _household
+    ) {
+        startDate = _startDate;
+        fee = _fee;
+        dueDates[_household] = _startDate + duration;
+    }
 
     // Register a new Household
     function registerHousehold(address _household, string memory _name)
@@ -30,22 +42,53 @@ abstract contract UtilityProvider {
         }
     }
 
-    function readHouseholds(address _household) external virtual {
-        bytes memory test = bytes(registeredHouseholds[_household]);
-        if (test.length == 0) {
-            console.log("String is zero!");
-        } else {
-            console.log(string(test));
+    function readFee() external view returns (uint256) {
+        return fee;
+    }
+
+    function calculateBillAmount(address _household)
+        internal
+        view
+        returns (uint256 balance, uint64 factor)
+    {
+        uint64 blockTimestamp = uint64(block.timestamp);
+        uint64 dueDate = dueDates[_household];
+        uint64 difference;
+        if (blockTimestamp > dueDate) {
+            difference = blockTimestamp - dueDate;
+        } else if (blockTimestamp < dueDate) {
+            difference = 0;
         }
+        factor = (difference) / duration;
+        balance = fee * factor;
+        return (balance, factor);
     }
 
     // Check if the payment is required and how much
     function paymentRequired(address _household)
         external
-        virtual
-        returns (uint256)
+        view
+        returns (uint256 balance, uint64 factor)
     {
-        return balances[_household];
+        return _paymentRequired(_household);
+    }
+
+    // Check if the payment is required and how much- Internal for gas savings.
+    function _paymentRequired(address _household)
+        internal
+        view
+        returns (uint256 balance, uint64 factor)
+    {
+        (balance, factor) = calculateBillAmount(_household);
+        require(
+            balance > 0,
+            "Nothing to pay yet. However, kindly check your due date using checkDueDate()"
+        );
+        return (balance, factor);
+    }
+
+    function checkDueDate(address _household) external view returns (uint64) {
+        return dueDates[_household];
     }
 
     /*
@@ -53,9 +96,11 @@ abstract contract UtilityProvider {
      *processed the Utility Provider will verify with the household if the msg.sender is authorised
      *to pay the bill or not.
      */
-    function billPayment(address _household, uint256 _amount) external virtual {
+    function billPayment(address _household) external virtual {
         HouseHold(_household).verifyBillPayment(msg.sender);
-        emit BillPayed(_household, _amount);
+        (uint256 balance, uint64 factor) = _paymentRequired(_household);
+        dueDates[_household] += duration * factor; // Update due date to the latest
+        emit BillPayed(_household, balance);
     }
 }
 
