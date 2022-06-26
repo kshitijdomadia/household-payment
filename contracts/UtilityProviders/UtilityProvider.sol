@@ -13,7 +13,6 @@ abstract contract UtilityProvider {
     mapping(address => string) private registeredHouseholds; // Would rather not have this mapping. However this is a requirement as specified in the description.
     mapping(address => uint64) private dueDates;
     uint256 private immutable fee;
-    uint64 private immutable startDate; // Due date for each provider will be ~ at the same date every month
     uint64 private constant duration = 2592000; // Duration for each payment will be done after 30 Days. Epoch- 2592000
 
     constructor(
@@ -21,7 +20,6 @@ abstract contract UtilityProvider {
         uint256 _fee,
         address _household
     ) {
-        startDate = _startDate;
         fee = _fee;
         dueDates[_household] = _startDate + duration;
     }
