@@ -10,7 +10,7 @@ abstract contract UtilityProvider {
         string indexed name
     );
 
-    mapping(address => string) private registeredHouseholds;
+    mapping(address => string) private registeredHouseholds; // Would rather not have this mapping. However this is a requirement as specified in the description.
     mapping(address => uint64) private dueDates;
     uint256 private immutable fee;
     uint64 private immutable startDate; // Due date for each provider will be ~ at the same date every month
@@ -26,7 +26,7 @@ abstract contract UtilityProvider {
         dueDates[_household] = _startDate + duration;
     }
 
-    // Register a new Household
+    // Register a new Household- Would rather not have this function. However this is a requirement as specified in the description.
     function registerHousehold(address _household, string memory _name)
         external
         virtual
@@ -73,7 +73,7 @@ abstract contract UtilityProvider {
         return _paymentRequired(_household);
     }
 
-    // Check if the payment is required and how much- Internal for gas savings.
+    // Check if the payment is required and how much- Internal for gas savings and internal calls.
     function _paymentRequired(address _household)
         internal
         view
