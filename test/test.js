@@ -228,7 +228,7 @@ describe("Utility Provider", function () {
     await gas.registerHousehold(household1.address, "Dubai")
     dueDate = await gas.checkDueDate(household1.address)
     await ethers.provider.send("evm_mine", [Number(dueDate) + 10368000]); // fast forward time to 4 months
-    //Fees required for 4 months worth of gas utilities -- Gas Providers take a fee of $50
+    //Fees required for 4 months worth of gas utilities ie. $200 -- Gas Providers take a fee of $50
     expect((await gas.paymentRequired(household1.address)).balance).to.be.equal("200000000000000000000")
   });
 
