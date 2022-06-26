@@ -8,7 +8,7 @@ abstract contract AccessControl {
     event RevokeRoles(bytes32[2] indexed roles, address indexed account);
     event RevokeRole(bytes32 indexed role, address indexed account);
 
-    mapping(bytes32 => mapping(address => bool)) public roles;
+    mapping(bytes32 => mapping(address => bool)) internal roles;
 
     /**
      * Avoiding _CREATOR to be hashed for security reasons. Will NOT be as cheaper as storing Bytes32 but avoids
