@@ -42,7 +42,7 @@ The project has been created with a few basic assumptions in mind.
 - A token that has mooned (1 Token= $100,000)? :exploding_head:
 - Enough balance for paying utilities/other things.
 
-> A simple solution for this would be to go target the easily liquidable tokens that have a pair with one of the stable coins (That the provider accepts) while the household member also has sufficient balance to make the swap and payment simultaneously. By querying the ```getPair``` of the DEX factory address and simply adding the Utility Providers Address in the 'to' column, we can automate the process of paying the utility bill for a non-stable coin within the smart contract.
+> A simple solution for this would be to go target the easily liquidable tokens that have a pair with one of the stable coins (That the provider accepts) while the household member also has sufficient balance to make the swap and payment simultaneously. By querying the ```getPair``` of the DEX factory address to confirm the pair and simply adding the Utility Providers Address in the 'to' column while making the payment, we can automate the process of paying the utility bill for a non-stable coin **within** the smart contract.
 
 ```solidity
 function swapTokensForExactTokens(
