@@ -54,5 +54,6 @@ function swapTokensForExactTokens(
     ) external returns (uint[] memory amounts);
 ```
 
-3. Test Cases have been created. Below are the results:
+# Test Cases
+
 ![Test Cases](/assets/images/TestCases.png)
