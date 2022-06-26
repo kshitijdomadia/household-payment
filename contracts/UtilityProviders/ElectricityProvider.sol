@@ -11,5 +11,5 @@ contract ElectricityProvider is UtilityProvider {
      * 2)
      * $130 will be the fee payment for each invoice
      */
-    constructor() UtilityProvider(1652572800, 130000000000000000000, address(this)) {}
+    constructor() UtilityProvider(1652572800, 130000000000000000000) {}
 }

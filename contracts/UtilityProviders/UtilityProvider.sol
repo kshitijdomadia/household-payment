@@ -1,6 +1,8 @@
 //SPDX-License-Identifier: None
 pragma solidity ^0.8.0;
 
+import "hardhat/console.sol";
+
 abstract contract UtilityProvider {
     event BillPayed(address indexed householdAddress, uint256 indexed amount);
     event HouseholdRegistered(
@@ -10,25 +12,21 @@ abstract contract UtilityProvider {
 
     mapping(address => string) private registeredHouseholds; // Would rather not have this mapping. However this is a requirement as specified in the description.
     mapping(address => uint64) private dueDates;
+    uint64 private immutable startDate;
     uint256 private immutable fee;
     uint64 private constant duration = 2592000; // Duration for each payment will be done after 30 Days. Epoch- 2592000
 
-    constructor(
-        uint64 _startDate,
-        uint256 _fee,
-        address _household
-    ) {
+    constructor(uint64 _startDate, uint256 _fee) {
         fee = _fee;
-        dueDates[_household] = _startDate + duration;
+        startDate = _startDate;
     }
 
     /**
-     * Register a new Household- Would rather not have this function. However this is a requirement as
+     * Register a new Household- Would rather not have this function with the "name" argument. However this is a requirement as
      * specified in the description. Storing strings in mapping is more expensive as a string can be of nlength.
      */
     function registerHousehold(address _household, string memory _name)
         external
-        virtual
         returns (bool)
     {
         registeredHouseholds[_household] = _name;
@@ -36,6 +34,7 @@ abstract contract UtilityProvider {
         if (_nameStorageRef.length == 0) {
             return false;
         } else {
+            dueDates[_household] = generateNewDueDate();
             emit HouseholdRegistered(_household, _name);
             return true;
         }
@@ -93,6 +92,20 @@ abstract contract UtilityProvider {
     // Returns a due date for a particular household.
     function checkDueDate(address _household) external view returns (uint64) {
         return dueDates[_household];
+    }
+
+    // Calculates new due date based on the difference between the start date and current block timestamp
+    function generateNewDueDate() private view returns (uint64) {
+        uint64 blockTimestamp = uint64(block.timestamp);
+        uint64 difference;
+        require(
+            blockTimestamp > startDate,
+            "Cannot generate a new due date before the start date"
+        );
+        difference = blockTimestamp - startDate;
+        uint64 factor = (difference) / duration;
+        uint64 newDate = (startDate + duration) + (duration * factor);
+        return newDate;
     }
 
     /*
