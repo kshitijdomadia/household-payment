@@ -24,6 +24,9 @@ async function main() {
   const registration = await gas.registerHousehold("0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc", "Mumbai")
   const readRegistration = await gas.readHouseholds("0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc")
   const readRegistration2 = await gas.readHouseholds("0x2546BcD3c84621e976D8185a91A922aE77ECEc30")
+  const readFee = await gas.readFee()
+
+  const gasFactor= await gas.testUint64();
 
   // console.log(readRegistration)
   // console.log(readRegistration2)

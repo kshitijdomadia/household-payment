@@ -2,8 +2,10 @@
 pragma solidity ^0.8.0;
 
 abstract contract AccessControl {
+    event GrantRoles(bytes32[2] indexed roles, address indexed account);
     event GrantRole(bytes32 indexed role, address indexed account);
     event GrantOwnership(address indexed account);
+    event RevokeRoles(bytes32[2] indexed roles, address indexed account);
     event RevokeRole(bytes32 indexed role, address indexed account);
 
     mapping(bytes32 => mapping(address => bool)) public roles;
@@ -40,8 +42,7 @@ abstract contract AccessControl {
         } else if (_role == SPECIAL || _role == ALLOWED) {
             roles[_role][_account] = true;
             roles[NORMAL][_account] = true;
-            emit GrantRole(_role, _account);
-            emit GrantRole(NORMAL, _account);
+            emit GrantRoles([_role, NORMAL], _account);
         } else if (_role == NORMAL) {
             roles[_role][_account] = true;
             emit GrantRole(_role, _account);
@@ -56,8 +57,7 @@ abstract contract AccessControl {
         if (_role == SPECIAL || _role == ALLOWED) {
             roles[_role][_account] = false;
             roles[NORMAL][_account] = false;
-            emit RevokeRole(_role, _account);
-            emit RevokeRole(NORMAL, _account);
+            emit RevokeRoles([_role, NORMAL], _account);
         } else if (_role == NORMAL) {
             roles[_role][_account] = false;
             emit RevokeRole(_role, _account);
