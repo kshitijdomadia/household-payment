@@ -123,8 +123,8 @@ abstract contract UtilityProvider {
      * due dates.
      */
     function billPayment(address _household) external virtual {
-        HouseHold(_household).verifyBillPayment(msg.sender);
         (uint256 balance, uint64 factor) = _paymentRequired(_household);
+        HouseHold(_household).verifyBillPayment(msg.sender, balance);
         dueDates[_household] += duration + (duration * factor); // Update due date to the latest
         emit BillPayed(_household, balance);
     }
@@ -132,5 +132,5 @@ abstract contract UtilityProvider {
 
 // Interface for the HouseHold contract to use the verifyBillPayment function.
 interface HouseHold {
-    function verifyBillPayment(address _member) external;
+    function verifyBillPayment(address _member, uint256 _balance) external;
 }
