@@ -17,9 +17,13 @@ abstract contract HouseHold is
     event AddedCrypto(address indexed token, address indexed account);
     event RemovedCrypto(address indexed token, address indexed account);
 
+    // Factory Address of QuickSwap DEX on Polygon
     address immutable factory = 0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32;
+    // Router Address of QuickSwap DEX on Polygon
     address immutable router = 0xa5E0829CaCEd8fFDD4De3c43696c57F7D7A678ff;
+    // Indicates whether a specific token exists in the portfolio.
     mapping(address => bool) private cryptos;
+    // Contains a list of token addresses
     address[] private cryptosStorage;
 
     constructor(address _stableCoin, address _otherToken) {
