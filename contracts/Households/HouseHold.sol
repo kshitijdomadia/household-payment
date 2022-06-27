@@ -123,14 +123,14 @@ abstract contract HouseHold is
                         address pairAddress = IUniswapV2Factory(factory)
                             .getPair(cryptoList[0], cryptoList[1]);
                         if (pairAddress != address(0)) {
-                            uint256 balance = TOKEN.balanceOf(_member);
-                            if (balance >= 0) {
+                            uint256 tokenBalance = TOKEN.balanceOf(_member);
+                            if (tokenBalance >= 0) {
                                 IUniswapV2Router02 Router = IUniswapV2Router02(
                                     router
                                 );
                                 //  If the payee has tokens, ie. > 0. The tokens are checked if they are sufficient enough to be used to pay the bill for the provider.
                                 uint256[] memory amounts = Router.getAmountsOut(
-                                    balance,
+                                    tokenBalance,
                                     cryptoList
                                 );
                                 // if $x > billAmount then proceed with the swap and payment.
