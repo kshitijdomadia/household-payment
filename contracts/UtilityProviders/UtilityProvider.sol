@@ -53,16 +53,16 @@ abstract contract UtilityProvider {
         view
         returns (uint256 balance, uint64 factor)
     {
-        uint64 blockTimestamp = uint64(block.timestamp);
         uint64 dueDate = dueDates[_household];
         require(
             dueDate > 0,
             "No due date found for this household. Please register household first"
         );
         uint64 difference;
+        uint64 blockTimestamp = uint64(block.timestamp);
         if (blockTimestamp > dueDate) {
             difference = blockTimestamp - dueDate;
-        } else if (blockTimestamp < dueDate) {
+        } else if (blockTimestamp <= dueDate) {
             difference = 0;
         }
         factor = (difference) / duration;
