@@ -118,7 +118,7 @@ abstract contract HouseHold is
                     if (cryptos[cryptosStorage[i]] == true) {
                         address stableCoin = cryptosStorage[0];
                         address token = cryptosStorage[i];
-                        IERC20 TOKEN = IERC20(cryptosStorage[i]);
+                        IERC20 TOKEN = IERC20(token);
                         // The list will invert the addresses so that the correct getAmountsOut is returned. ie. 1 Token = $x
                         address[] memory cryptoList = new address[](2);
                         cryptoList[0] = token;
