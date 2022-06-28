@@ -62,7 +62,7 @@ abstract contract UtilityProvider {
         uint64 blockTimestamp = uint64(block.timestamp);
         if (blockTimestamp > dueDate) {
             difference = blockTimestamp - dueDate;
-        } else if (blockTimestamp <= dueDate) {
+        } else {
             difference = 0;
         }
         factor = (difference) / duration;
