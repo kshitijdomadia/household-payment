@@ -55,7 +55,7 @@ function swapTokensForExactTokens(
 ```
 Once the utility provider receives the payment it can emit the ```BillPayed``` event to signal that the payment has been received.
 
-**IMPORTANT NOTICE:** This has been implemented in branch ```router-interact```
+**IMPORTANT NOTICE:** This idea has been implemented in branch ```router-interact``` without the offchain-script.js and test.js.
 
 # Test Cases
 
