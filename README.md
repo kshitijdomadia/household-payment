@@ -1,7 +1,40 @@
-# Bisonai Household Payment
+# Household Payment (A project built on Solidity)
 
-## Project Description
-The project was made as per the instructions lined out by the Bisonai team [here](https://bisonai.notion.site/Blockchain-Software-Developer-d518215286b3480ab9fadf03532cd3fb)
+## Problem Statement ⚡🔥💦
+
+Every month, a household has to pay their bills (electricity, gas, and water) to their utility providers. Utility providers accept only one type of stable coin as payment. The household would like to use its cryptocurrency portfolio to pay for its utilities. Household members would prefer if everything happens automatically, but they do not mind being reminded about the payment before it is too late. The most important thing for them is that the solution would select automatically among their portfolio cryptocurrencies and use the best one for payment.
+
+## Project Description 📄
+
+The goal is to implement a solution using Solidity to enable households to pay automatically for their utility bills with their cryptocurrency portfolio.
+
+- Household has to be registered at every utility provider.
+    
+    ```solidity
+    function registerHousehold(address household, string memory name) external returns (bool);
+    ```
+    
+    - `household` is an address of deployed smart contract.
+    - `name` is a unique string that allows utility provider to know where you live.
+    - returns `true` if registration proceeded successfully, otherwise returns `false`
+- Household’s cryptocurrency portfolio is held inside of smart contract.
+- Every household member can add new household member.
+- Only special household members can remove other members (including other special members).
+- Only **allowed** household members can add or remove cryptocurrencies from household’s portfolio.
+- Only **allowed** household members can pay for household’s utility bills.
+- Creator (both special and **allowed** implicitly) of household cannot be removed from household and cannot be denied payment for utilities (always **allowed**).
+- All utility (electricity, gas, and water) providers require the payment before the certain date which is different for each provider, but same every month.
+- You can find out about the required payment from each utility provider by calling their smart contract.
+    
+    ```solidity
+    function paymentRequired(address household) external returns (uint256);
+    ```
+    
+    - `household` is an address of deployed smart contract.
+    - returns the amount of stable coin that needs to be paid
+
+**NOTE:** The description was laid down with basic assumptions. The code might reflect a few differences that may not match with the description entirely.
+
 ## Brain Dump :brain:
 ![Bisonai Description](/assets/images/Bisonai_Description_Map.png)
 
@@ -55,7 +88,7 @@ function swapTokensForExactTokens(
 ```
 Once the utility provider receives the payment it can emit the ```BillPayed``` event to signal that the payment has been received.
 
-**IMPORTANT NOTICE:** This idea has been implemented in branch ```router-interact``` without the offchain-script.js and test.js.
+**IMPORTANT NOTICE:** This idea has been implemented in branch ```router-interact``` without the offchain-script.js and test.js implementation.
 
 # Test Cases
 
