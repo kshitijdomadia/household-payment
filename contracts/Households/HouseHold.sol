@@ -114,44 +114,43 @@ abstract contract HouseHold is
                 return true;
             } else {
                 uint256 length = cryptosStorage.length;
-                for (uint256 i = 1; i < length; i++) {
-                    if (cryptos[cryptosStorage[i]] == true) {
-                        address stableCoin = cryptosStorage[0];
-                        address token = cryptosStorage[i];
-                        IERC20 TOKEN = IERC20(token);
-                        // The list will invert the addresses so that the correct getAmountsOut is returned. ie. 1 Token = $x
-                        address[] memory cryptoList = new address[](2);
-                        cryptoList[0] = token;
-                        cryptoList[1] = stableCoin;
-                        // Check if the token has a pair with a stable coin
-                        address pairAddress = IUniswapV2Factory(factory)
-                            .getPair(cryptoList[0], cryptoList[1]);
-                        if (pairAddress != address(0)) {
-                            uint256 tokenBalance = TOKEN.balanceOf(_member);
-                            if (tokenBalance >= 0) {
-                                IUniswapV2Router02 Router = IUniswapV2Router02(
-                                    router
-                                );
-                                //  If the payee has tokens, ie. > 0. The tokens are checked if they are sufficient enough to be used to pay the bill for the provider.
-                                uint256[] memory amounts = Router.getAmountsOut(
-                                    tokenBalance,
-                                    cryptoList
-                                );
-                                // if $x > billAmount then proceed with the swap and payment.
-                                if (amounts[1] > _amount) {
-                                    address[] memory tokenPath = new address[](
-                                        2
-                                    );
-                                    tokenPath[0] = stableCoin;
-                                    tokenPath[1] = token;
-                                    Router.swapTokensForExactTokens(
-                                        _amount,
-                                        amounts[1],
-                                        tokenPath,
-                                        msg.sender,
-                                        block.timestamp + 300 // Transaction valid for 5 minutes.
-                                    );
-                                    return true;
+                // unchecked code block to optimize gas and avoid uneccessary overflow/underflow checks
+                unchecked {
+                    for (uint256 i = 1; i < length; i++) {
+                        if (cryptos[cryptosStorage[i]] == true) {
+                            address stableCoin = cryptosStorage[0];
+                            address token = cryptosStorage[i];
+                            IERC20 TOKEN = IERC20(token);
+                            // The list will invert the addresses so that the correct getAmountsOut is returned. ie. 1 Token = $x
+                            address[] memory tokenPath = new address[](2);
+                            tokenPath[0] = token;
+                            tokenPath[1] = stableCoin;
+                            // Check if the token has a pair with a stable coin
+                            address pairAddress = IUniswapV2Factory(factory)
+                                .getPair(tokenPath[0], tokenPath[1]);
+                            if (pairAddress != address(0)) {
+                                uint256 tokenBalance = TOKEN.balanceOf(_member);
+                                if (tokenBalance >= 0) {
+                                    IUniswapV2Router02 Router = IUniswapV2Router02(
+                                            router
+                                        );
+                                    //  If the payee has tokens, ie. > 0. The tokens are checked if they are sufficient enough to be used to pay the bill for the provider.
+                                    uint256[] memory amounts = Router
+                                        .getAmountsOut(tokenBalance, tokenPath);
+                                    // if $x > billAmount then proceed with the swap and payment.
+                                    if (amounts[1] > _amount) {
+                                        // Reusing the same memory slot instead of creating a new memory variable
+                                        tokenPath[0] = stableCoin;
+                                        tokenPath[1] = token;
+                                        Router.swapTokensForExactTokens(
+                                            _amount,
+                                            amounts[1],
+                                            tokenPath,
+                                            msg.sender,
+                                            block.timestamp + 300 // Transaction valid for 5 minutes.
+                                        );
+                                        return true;
+                                    }
                                 }
                             }
                         }
